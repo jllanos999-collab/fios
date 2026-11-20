@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050b18"><title>Fi.OS – Tu dinero. Tus metas. Un solo sistema.</title>
+<style>
+:root{--bg:#050b18;--c1:#0b1a33;--c2:#10244a;--bd:#1d3f78;--ac:#1a6dff;--tx:#fff;--mu:#8fa3c7;--ok:#2ecc71;--ko:#ff5a6e;--wa:#ffb020}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:#02050d;color:var(--tx);font:15px/1.4 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+#app{max-width:430px;min-height:100dvh;margin:0 auto;background:radial-gradient(120% 60% at 50% 0,#0a2150 0,var(--bg) 60%);position:relative;padding:calc(env(safe-area-inset-top) + 14px) 18px 96px;overflow-x:hidden}
+@media(min-width:600px){#app{min-height:min(880px,96dvh);margin:2dvh auto;border:1px solid var(--bd);border-radius:36px;box-shadow:0 0 60px #0a3a9a55}}
+h1{font-size:26px;font-weight:700;letter-spacing:-.5px}h2{font-size:17px;margin:18px 0 8px}.mu{color:var(--mu);font-size:13px}.sm{font-size:12px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:22px}.lg{width:38px;height:38px;border-radius:11px;background:linear-gradient(145deg,#16356b,#0a1a3a);border:1px solid var(--bd);display:grid;place-items:center;font-size:16px}.dot{color:var(--ac)}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.av{width:34px;height:34px;border-radius:50%;background:var(--c2);border:1px solid var(--bd);display:grid;place-items:center;font-size:12px;font-weight:700;cursor:pointer}
+.card{background:linear-gradient(160deg,var(--c2),var(--c1));border:1px solid var(--bd);border-radius:16px;padding:14px;margin:10px 0;display:block;width:100%;color:inherit;text-align:left;font:inherit}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.g2 .card{margin:0}
+button{font:inherit;cursor:pointer}.btn{background:var(--ac);color:#fff;border:0;border-radius:12px;padding:14px;width:100%;font-weight:700;margin-top:12px}.btn:active{filter:brightness(.85)}
+.btn.s{background:var(--c2);border:1px solid var(--bd)}
+input,select{width:100%;background:#071226;border:1px solid var(--bd);color:#fff;border-radius:12px;padding:13px;font:inherit;margin:6px 0}
+input:focus,select:focus,button:focus-visible{outline:2px solid var(--ac)}
+label{font-size:13px;color:var(--mu)}
+.big{font-size:30px;font-weight:700}.up{color:var(--ok);font-size:13px}.neg{color:var(--ko)}.pos{color:var(--ok)}
+.ic{width:36px;height:36px;border-radius:10px;background:#0a2a60;display:grid;place-items:center;flex:none}
+nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;display:flex;background:#06101fee;border-top:1px solid var(--bd);padding:8px 0 calc(env(safe-area-inset-bottom) + 8px);backdrop-filter:blur(10px);z-index:5}
+nav button{flex:1;background:none;border:0;color:var(--mu);font-size:11px;display:grid;gap:2px;justify-items:center}nav button b{font-size:20px;font-weight:400}nav .on{color:var(--ac)}
+.pill{display:flex;gap:6px;margin:8px 0;overflow-x:auto}.pill button{background:var(--c1);border:1px solid var(--bd);color:var(--mu);border-radius:20px;padding:7px 14px;white-space:nowrap}.pill .on{background:var(--ac);color:#fff;border-color:var(--ac)}
+.opt{display:flex;align-items:center;gap:12px;background:var(--c1);border:1px solid var(--bd);border-radius:14px;padding:15px;margin:9px 0;width:100%;color:#fff;font:inherit;text-align:left}
+.opt.on{border-color:var(--ac);box-shadow:0 0 14px #1a6dff66}.rd{width:18px;height:18px;border-radius:50%;border:2px solid var(--bd);flex:none}.on .rd{background:var(--ac);border-color:var(--ac)}
+.bar{height:6px;background:#0a1830;border-radius:4px;margin:8px 0;overflow:hidden}.bar i{display:block;height:100%;background:var(--ac)}
+.sh{position:fixed;inset:0;background:#000a;z-index:9;display:flex;align-items:flex-end;justify-content:center}.sh>div{background:var(--bg);border:1px solid var(--bd);border-radius:22px 22px 0 0;width:100%;max-width:430px;padding:18px 18px calc(env(safe-area-inset-bottom) + 18px)}
+.toast{position:fixed;top:14px;left:50%;transform:translateX(-50%);background:var(--c2);border:1px solid var(--ac);padding:10px 16px;border-radius:12px;z-index:20;max-width:90%}
+.bub{background:var(--c1);border:1px solid var(--bd);border-radius:14px;padding:11px;margin:8px 0;max-width:88%;white-space:pre-line}.me{margin-left:auto;background:var(--ac);border-color:var(--ac)}
+.badge{display:inline-block;background:#3a2a05;color:var(--wa);border-radius:8px;padding:3px 8px;font-size:11px}
+.back{background:none;border:0;color:var(--ac);padding:6px 0;font-size:15px}
+</style></head><body><div id="app"></div><nav id="nav"></nav>
+<script>
+const K='fios_sim_v1',$=s=>document.querySelector(s);
+const R={USD:[1,'$','Dólar estadounidense'],EUR:[.92,'€','Euro'],GBP:[.79,'£','Libra esterlina'],JPY:[150,'¥','Yen japonés'],DOP:[60,'RD$','Peso dominicano']};
+const D={ob:0,mode:'',cur:'USD',debt:0,ess:0,mo:6,user:'',email:'',ef:0,em:0,inv:0,de:0,tx:[],goals:[],hist:[],inc:0,hide:0};
+let S=Object.assign({},D,(()=>{try{return JSON.parse(localStorage.getItem(K))||{}}catch(e){return {}}})());
+let V='home',F='Todos',AP='Resumen',PT='Presupuesto',CH=[];
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
+const dec=()=>S.cur=='JPY'?0:2;
+const num=n=>Number(n).toLocaleString('en-US',{minimumFractionDigits:dec(),maximumFractionDigits:dec()});
+const m=n=>(n<0?'-':'')+R[S.cur][1]+num(Math.abs(n));
+const M=n=>S.hide?'••••••':m(n)+' '+S.cur;
+const sv=()=>S.goals.reduce((a,g,i)=>a+(i?g.saved:0),0);
+const ahorros=()=>S.em+sv();
+const pat=()=>S.ef+S.em+S.inv+sv()-S.de;
+const snap=()=>{S.hist.push([Date.now(),pat()]);S.hist=S.hist.slice(-40)};
+const toast=t=>{const e=document.createElement('div');e.className='toast';e.textContent=t;document.body.appendChild(e);setTimeout(()=>e.remove(),2400)};
+const val=id=>parseFloat(($('#'+id)||{}).value)||0;
+const fd=t=>new Date(t).toLocaleDateString('es',{day:'numeric',month:'short',year:'numeric'});
+const ft=t=>new Date(t).toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'});
+const ini=()=>(S.user||'M').replace('@','').slice(0,2).toUpperCase();
+const nm=()=>(S.user||'').replace('@','')||'amigo';
+const add=(k,a,s,n)=>{S.tx.unshift({k,a,s,n,t:Date.now()});};
+const NAV=[['home','⌂','Inicio'],['acc','▤','Cuentas'],['mov','⇄','Movimientos'],['more','⋯','Más']];
+
+function logo(){return '<div class="logo"><div class="lg">Fi</div><span>Fi<span class="dot">.</span>OS</span></div>'}
+function top(t,s){return '<div class="top"><div><div class="logo" style="font-size:18px">Fi<span class="dot">.</span>OS</div></div><div class="av" onclick="go(\'cfg\')">'+ini()+'</div></div><h1>'+t+'</h1><p class="mu" style="margin-bottom:12px">'+s+'</p>'}
+function go(v){V=v;render();window.scrollTo(0,0)}
+
+/* ---------- ONBOARDING ---------- */
+function onboarding(){
+ const o=S.ob,bk=o>0?'<button class="back" onclick="S.ob--;render()">← Volver</button>':'';
+ if(o==0)return '<p class="mu" style="text-align:right">ES / EN</p><div style="margin:40px 0 30px;text-align:center"><div class="logo" style="justify-content:center;font-size:40px"><div class="lg" style="width:56px;height:56px;font-size:24px">Fi</div>Fi<span class="dot">.</span>OS</div><p class="mu" style="margin-top:14px">Tu dinero. Tus metas.<br>Un solo sistema.</p></div>'+
+ '<button class="opt" style="display:block;padding:22px" onclick="S.mode=\'personal\';S.ob=1;render()"><h1>Cuenta<br>Personal</h1><p class="mu">Finanzas personales, deudas y fondo de emergencia</p></button>'+
+ '<button class="opt" style="display:block;padding:22px" onclick="S.mode=\'business\';S.ob=1;render()"><h1>Cuenta<br>Business</h1><p class="mu">Flujo de caja, balance y operación</p></button><p class="mu sm" style="text-align:center;margin-top:20px"><span class="badge">MODO SIMULADO</span><br>Datos ficticios. No se mueve dinero real.</p>';
+ if(o==1)return bk+'<h1 style="text-align:center;margin:20px 0 8px">Selecciona tu divisa principal</h1><p class="mu" style="text-align:center">Esta será la moneda base para calcular tus saldos y resúmenes.</p>'+
+ Object.keys(R).map(c=>'<button class="opt '+(S.cur==c?'on':'')+'" onclick="S.cur=\''+c+'\';render()"><span class="rd"></span><span><b>'+c+'</b> — '+R[c][2]+' ('+R[c][1]+')</span></button>').join('')+'<button class="btn" onclick="S.ob=2;render()">Continuar</button>';
+ if(o==2)return bk+'<h1 style="text-align:center;margin:20px 0 8px">Deudas pendientes</h1><p class="mu" style="text-align:center">Ingresa el total acumulado de tus compromisos o préstamos actuales.</p><div class="card"><label>Monto total de deudas</label><input id="debt" type="number" inputmode="decimal" min="0" placeholder="0.00" value="'+(S.debt||'')+'" style="font-size:28px;background:none;border:0;padding:8px 0"></div><div class="card mu">Si no tienes deudas, puedes dejar $0.00 y continuar.</div><button class="btn" onclick="S.debt=Math.max(0,val(\'debt\'));S.ob=3;render()">Continuar</button>';
+ if(o==3)return bk+'<h1 style="text-align:center;margin:12px 0">Fondo de Emergencia</h1><div class="card"><b>¿Qué es un Fondo de Emergencia?</b><p class="mu" style="margin-top:6px">Un colchón financiero líquido reservado para gastos imprevistos, como emergencias médicas o reparaciones urgentes.</p></div><div class="card"><label>Mis gastos esenciales de un mes</label><input id="ess" type="number" inputmode="decimal" min="0" placeholder="0.00" value="'+(S.ess||'')+'" oninput="S.ess=Math.max(0,val(\'ess\'));$(\'#tg\').textContent=m(S.ess*S.mo)+\' \'+S.cur" style="font-size:28px;background:none;border:0;padding:8px 0"></div><div class="pill"><button class="'+(S.mo==3?'on':'')+'" onclick="S.mo=3;S.ess=val(\'ess\');render()">3 Meses</button><button class="'+(S.mo==6?'on':'')+'" onclick="S.mo=6;S.ess=val(\'ess\');render()">6 Meses (Recomendado)</button></div><div class="card" style="text-align:center"><span class="mu">Monto objetivo sugerido:</span><div class="big" id="tg">'+m(S.ess*S.mo)+' '+S.cur+'</div><span class="mu sm">Gastos de 1 mes × '+S.mo+' meses</span></div><button class="btn" onclick="S.ess=val(\'ess\');S.ob=4;render()">Comenzar a usar Fi.OS</button>';
+ if(o==4)return bk+'<h1 style="text-align:center;margin:20px 0 8px">Crea tu cuenta</h1><p class="mu" style="text-align:center">Ingresa tus datos para proteger y sincronizar tu información financiera.</p><label>Nombre de usuario</label><input id="us" placeholder="@usuario" value="'+S.user+'"><label>Correo electrónico</label><input id="em" type="email" placeholder="ejemplo@correo.com" value="'+S.email+'"><label>Contraseña</label><input id="pw" type="password" placeholder="Mínimo 8 caracteres" oninput="pwd()"><p id="ps" class="sm mu">Usa letras, números y símbolos.</p><button class="btn" onclick="reg()">Continuar a verificación</button>';
+ if(o==5)return bk+'<h1 style="text-align:center;margin:20px 0 8px">Verificación de credenciales</h1><p class="mu" style="text-align:center">Sube tus documentos para validar tu perfil y desbloquear las funciones avanzadas.</p><div class="card"><b>Documento de Identidad (ID o Pasaporte)</b><p class="mu sm">JPG, PNG o PDF (máx. 10MB)</p><input type="file" accept="image/*,.pdf"></div><div class="card"><b>Estado de cuenta bancario</b><p class="mu sm">Comprobante reciente de saldo o titularidad</p><input type="file" accept="image/*,.pdf"></div><p class="mu sm">🔒 Simulación: los archivos no se envían ni se guardan en ningún servidor.</p><button class="btn" onclick="fin()">Completar registro</button>';
+}
+function pwd(){const p=$('#pw').value;let n=0;if(p.length>=8)n++;if(/[A-Z]/.test(p)&&/[a-z]/.test(p))n++;if(/\d/.test(p))n++;if(/[^\w]/.test(p))n++;$('#ps').innerHTML=['Muy débil','Débil','Aceptable','Segura','Muy segura'][n]+' '+'▰'.repeat(n)+'▱'.repeat(4-n)}
+function reg(){let u=$('#us').value.trim(),e=$('#em').value.trim(),p=$('#pw').value;
+ if(u.replace('@','').length<3)return toast('El usuario necesita 3 letras o más');
+ if(!/^\S+@\S+\.\S+$/.test(e))return toast('Escribe un correo válido');
+ if(p.length<8)return toast('La contraseña necesita 8 caracteres o más');
+ S.user=u[0]=='@'?u:'@'+u;S.email=e;S.ob=5;render()}
+function fin(){S.ob=9;S.ef=0;S.em=0;S.de=S.debt;
+ S.goals=[{n:'Fondo de emergencia',t:S.ess*S.mo,saved:0,lock:0,date:''}];
+ snap();save();V='home';toast('¡Bienvenido a Fi.OS, '+nm()+'!');render()}
+
+/* ---------- PANTALLAS ---------- */
+function rowTx(t,sh){const c=t.s>0?'pos':'neg';return '<div class="row card" style="margin:6px 0"><div class="row" style="justify-content:flex-start"><div class="ic">'+(t.k=='Depósito'?'⬇':t.k=='Retiro'?'⬆':t.k=='Ahorro'?'◔':'⇄')+'</div><div><b>'+t.k+'</b><div class="mu sm">'+(sh?fd(t.t)+' · ':'')+t.n+'</div></div></div><div style="text-align:right"><b class="'+c+'">'+(t.s>0?'+':'-')+m(t.a)+'</b><div class="mu sm">'+ft(t.t)+'</div></div></div>'}
+function home(){
+ return top('Hola, '+nm(),'Aquí está tu resumen financiero.')+
+ '<div class="card"><div class="row"><span class="mu">Patrimonio total</span><button class="back" onclick="S.hide=!S.hide;save();render()">'+(S.hide?'Mostrar':'Ocultar')+'</button></div><div class="big">'+M(pat())+'</div><div class="up">'+(S.tx.length?'▲ '+S.tx.length+' movimientos registrados':'Aún sin movimientos')+'</div></div>'+
+ '<div class="g2"><div class="card"><span class="mu sm">Efectivo</span><br><b>'+M(S.ef)+'</b></div><div class="card"><span class="mu sm">Ahorros</span><br><b>'+M(ahorros())+'</b></div><div class="card"><span class="mu sm">Inversiones</span><br><b>'+M(S.inv)+'</b></div><div class="card"><span class="mu sm">Deudas</span><br><b class="'+(S.de?'neg':'')+'">'+M(S.de)+'</b></div></div>'+
+ '<div class="row"><h2>Actividad reciente</h2><button class="back" onclick="go(\'mov\')">Ver todo ›</button></div>'+
+ (S.tx.length?S.tx.slice(0,3).map(t=>rowTx(t,1)).join(''):'<div class="card mu">Empieza con un depósito para ver tu actividad aquí.</div>')+
+ '<button class="btn" onclick="sheet(\'dep\')">+ Registrar depósito</button>';
+}
+function acc(){const L=[['ef','Efectivo','Cuenta principal',S.ef],['em','Ahorros de Emergencia','Fondo de seguridad',S.em],['inv','Inversiones','Crecimiento a largo plazo',S.inv],['de','Deudas','Mantén el control',S.de]];
+ return top('Cuentas','Gestiona tus cuentas y saldos.')+L.map(a=>'<div class="card row"><div class="row" style="justify-content:flex-start"><div class="ic">▣</div><div><b>'+a[1]+'</b><div class="mu sm">'+M(a[3])+'</div><div class="mu sm">'+a[2]+'</div></div></div></div>').join('')+
+ '<button class="btn" onclick="sheet(\'ret\')">Retirar</button><button class="btn s" onclick="sheet(\'tra\')">Transferir entre cuentas</button><button class="btn s" onclick="sheet(\'dep\')">+ Depositar</button>'}
+function mov(){const L=S.tx.filter(t=>F=='Todos'||(F=='Ingresos'&&t.s>0)||(F=='Gastos'&&t.s<0&&t.k!='Transferencia'&&t.k!='Ahorro')||(F=='Transferencias'&&(t.k=='Transferencia'||t.k=='Ahorro')));
+ return top('Movimientos','Historial de transacciones')+'<div class="pill">'+['Todos','Ingresos','Gastos','Transferencias'].map(f=>'<button class="'+(F==f?'on':'')+'" onclick="F=\''+f+'\';render()">'+f+'</button>').join('')+'</div>'+(L.length?L.map(t=>rowTx(t,1)).join(''):'<div class="card mu">Sin movimientos en esta vista.</div>')}
+function aho(){const g=S.goals;
+ return top('Ahorros','Construye tus metas financieras.')+'<div class="card"><span class="mu">Total en ahorros</span><div class="big">'+M(ahorros())+'</div></div><div class="row"><h2>Mis objetivos</h2></div>'+
+ g.map((x,i)=>{const cur=i?x.saved:S.em,p=x.t?Math.min(100,cur/x.t*100):0;return '<div class="card"><div class="row"><b>'+x.n+'</b><span class="mu sm">'+p.toFixed(1)+'%</span></div><div class="bar"><i style="width:'+p+'%"></i></div><div class="mu sm">'+m(cur)+' / '+m(x.t)+(x.date?' · '+x.date:'')+'</div><button class="btn s" style="padding:9px" onclick="sheet(\'aho\','+i+')">Aportar</button></div>'}).join('')+
+ '<button class="btn" onclick="sheet(\'goal\')">+ Crear ahorro</button>'}
+function inv(){return top('Inversiones','Haz crecer tu dinero con inteligencia.')+'<div class="card"><span class="mu">Portafolio total</span><div class="big">'+M(S.inv)+'</div></div><h2>Opciones disponibles</h2><div class="card row"><div><b>S&P 500</b><div class="mu sm">Inversión de largo plazo (simulada)</div></div><button class="back" onclick="sheet(\'inv\')">Invertir ›</button></div><p class="mu sm">Las inversiones reales están planeadas para una fase posterior y requerirían un intermediario autorizado.</p>'+(S.em<(S.goals[0]||{t:0}).t?'<div class="card" style="border-color:var(--wa)">⚠ Tu fondo de emergencia aún no está completo. Conviene terminarlo antes de invertir.</div>':'')}
+function donut(parts,cols,ct){const T=parts.reduce((a,b)=>a+b,0)||1;let o=0;const r=48,c=2*Math.PI*r;
+ return '<svg viewBox="0 0 120 120" width="150"><circle cx="60" cy="60" r="'+r+'" fill="none" stroke="#0a1830" stroke-width="16"/>'+parts.map((p,i)=>{const l=p/T*c,s='<circle cx="60" cy="60" r="'+r+'" fill="none" stroke="'+cols[i]+'" stroke-width="16" stroke-dasharray="'+l+' '+(c-l)+'" stroke-dashoffset="'+(-o)+'" transform="rotate(-90 60 60)"/>';o+=l;return s}).join('')+'<text x="60" y="64" fill="#fff" font-size="11" text-anchor="middle" font-weight="700">'+ct+'</text></svg>'}
+function plan(){const B=[['Esenciales',45,'#1a6dff'],['Ocio',20,'#4aa3ff'],['Ahorros',20,'#2ecc71'],['Otros',15,'#ffb020']],base=S.inc||S.ef;
+ let h=top('Planificación','Organiza hoy, vive mañana.')+'<div class="pill">'+['Presupuesto','Ingresos'].map(f=>'<button class="'+(PT==f?'on':'')+'" onclick="PT=\''+f+'\';render()">'+f+'</button>').join('')+'</div>';
+ if(PT=='Presupuesto')h+='<div class="card row">'+donut(B.map(b=>b[1]),B.map(b=>b[2]),'Regla 45/20/20/15')+'<div>'+B.map(b=>'<div class="sm"><span style="color:'+b[2]+'">●</span> '+b[0]+' '+b[1]+'%<br><b>'+m(base*b[1]/100)+'</b></div>').join('')+'</div></div><p class="mu sm">Base: '+(S.inc?'tus ingresos mensuales':'tu efectivo disponible')+'.</p>';
+ else h+='<div class="card"><span class="mu">Ingresos recurrentes</span><div class="big">'+M(S.inc)+' / mes</div></div><button class="btn" onclick="sheet(\'inc\')">Editar ingresos</button><button class="btn s" onclick="if(S.inc){S.ef+=S.inc;add(\'Depósito\',S.inc,1,\'Ingreso recurrente\');snap();save();toast(\'Ingreso del mes registrado\');render()}else toast(\'Primero define tus ingresos\')">Registrar ingreso de este mes</button>';
+ return h}
+function ana(){const H=S.hist;let ch='<div class="card mu">Registra movimientos para ver la evolución de tu patrimonio.</div>';
+ if(H.length>1){const v=H.map(x=>x[1]),mn=Math.min(...v),mx=Math.max(...v),d=mx-mn||1,pts=v.map((y,i)=>(i/(v.length-1)*300).toFixed(1)+','+(90-(y-mn)/d*80).toFixed(1)).join(' ');
+  ch='<div class="card"><svg viewBox="0 0 300 100" width="100%"><polygon points="0,100 '+pts+' 300,100" fill="#1a6dff33"/><polyline points="'+pts+'" fill="none" stroke="#4aa3ff" stroke-width="2"/></svg><div class="row mu sm"><span>mín '+m(mn)+'</span><span>máx '+m(mx)+'</span></div></div>'}
+ const sp=S.tx.filter(t=>t.s<0&&t.k=='Retiro').reduce((a,t)=>a+t.a,0),ing=S.tx.filter(t=>t.s>0).reduce((a,t)=>a+t.a,0),pr=[S.ef,ahorros(),S.inv],T=pr.reduce((a,b)=>a+b,0)||1;
+ return top('Análisis','Visualiza tu progreso financiero.')+'<div class="pill">'+['Resumen','Gastos','Ingresos'].map(f=>'<button class="'+(AP==f?'on':'')+'" onclick="AP=\''+f+'\';render()">'+f+'</button>').join('')+'</div>'+
+ (AP=='Resumen'?'<h2>Evolución de tu patrimonio</h2>'+ch+'<h2>Distribución de activos</h2><div class="card row">'+donut(pr,['#1a6dff','#2ecc71','#ffb020'],m(T))+'<div class="sm">'+['Efectivo','Ahorros','Inversiones'].map((n,i)=>n+' <b>'+(pr[i]/T*100).toFixed(1)+'%</b>').join('<br>')+'</div></div>':
+ '<div class="card"><span class="mu">'+(AP=='Gastos'?'Total retirado':'Total ingresado')+'</span><div class="big">'+M(AP=='Gastos'?sp:ing)+'</div></div>')}
+function ai(){const q=['¿Cómo puedo ahorrar más?','¿Es buen momento para invertir?','¿Cuánto debería destinar a mis ahorros?','Dame un plan financiero para 6 meses'];
+ return top('Fi.OS IA','Tu asesor financiero personal.')+'<div id="chat">'+(CH.length?CH.map(c=>'<div class="bub '+(c[0]?'me':'')+'">'+c[1]+'</div>').join(''):'<div class="card" style="text-align:center">¿En qué puedo ayudarte hoy?</div>')+'</div>'+q.map(x=>'<button class="card" style="padding:10px;margin:6px 0" onclick="ask(this.textContent)">'+x+'</button>').join('')+'<div class="row"><input id="qi" placeholder="Escribe tu pregunta..." onkeydown="if(event.key==\'Enter\')ask($(\'#qi\').value)"><button class="btn" style="width:auto;margin:0;padding:13px 16px" onclick="ask($(\'#qi\').value)">➤</button></div><p class="mu sm">Simulación con reglas simples. No es asesoría financiera ni ejecuta operaciones.</p>'}
+function ask(q){q=(q||'').trim();if(!q)return;const l=q.toLowerCase(),ess=S.ess,g0=S.goals[0]||{t:0},ba=S.inc||S.ef;let a;
+ if(/invert|bolsa|etf/.test(l))a=S.em<g0.t?'Aún no. Tu fondo de emergencia lleva '+m(S.em)+' de '+m(g0.t)+'. Complétalo primero y luego considera inversión de largo plazo.':'Con tu fondo de emergencia completo, puedes explorar inversión a largo plazo en pequeños aportes periódicos.';
+ else if(/destin|porcent|cuánto|cuanto/.test(l))a='Una guía común es 20% de tus ingresos a ahorros.\nCon '+m(ba)+' serían '+m(ba*.2)+' al mes.';
+ else if(/plan|meses/.test(l))a='Plan a 6 meses:\n1. Mes 1: registra todos tus gastos.\n2. Mes 2-3: aporta '+m(ba*.2)+' al fondo de emergencia.\n3. Mes 4: reduce deudas ('+m(S.de)+' pendientes).\n4. Mes 5-6: acelera tu meta de '+m(g0.t)+'.';
+ else if(/ahorr|gast/.test(l))a='Tres ideas: automatiza un aporte fijo al recibir ingresos, revisa gastos de ocio (20% del presupuesto) y paga primero las deudas con más interés.';
+ else a='Puedo ayudarte con ahorro, deudas, presupuesto y plan financiero. Prueba una de las preguntas sugeridas.';
+ CH.push([1,q],[0,a]);render();window.scrollTo(0,document.body.scrollHeight)}
+function cfg(){const it=[['Perfil y seguridad',S.user+' · '+S.email],['Monedas',S.cur+' · '+R[S.cur][2]],['Notificaciones','Alertas y recordatorios'],['Apariencia','Tema oscuro'],['Privacidad','Datos y permisos'],['Ayuda y soporte','Centro de ayuda'],['Acerca de Fi.OS','Versión 1.0.0 (simulación)']];
+ return top('Configuración','Personaliza tu experiencia.')+it.map((x,i)=>'<button class="card row" onclick="cf('+i+')"><span><b>'+x[0]+'</b><br><span class="mu sm">'+x[1]+'</span></span><span class="mu">›</span></button>').join('')+'<button class="btn s" onclick="if(confirm(\'¿Borrar todos los datos de la simulación?\')){localStorage.removeItem(K);location.reload()}">Reiniciar simulación</button>'}
+function cf(i){if(i==1)sheet('cur');else if(i==6)toast('Fi.OS 1.0.0 · demo con datos ficticios');else toast('Disponible en la versión completa')}
+function more(){const L=[['aho','◔','Ahorros'],['inv','↗','Inversiones'],['plan','▦','Planificación'],['ana','◐','Análisis'],['ai','✦','Fi.OS IA'],['cfg','⚙','Configuración']];
+ return top('Más','Todas las secciones de Fi.OS.')+L.map(x=>'<button class="card row" onclick="go(\''+x[0]+'\')"><span class="row" style="justify-content:flex-start"><span class="ic">'+x[1]+'</span><b>'+x[2]+'</b></span><span class="mu">›</span></button>').join('')}
+
+/* ---------- OPERACIONES ---------- */
+function sheet(t,i){const A=[['ef','Efectivo'],['em','Ahorros de Emergencia'],['inv','Inversiones'],['de','Deudas']],o=(l,sel)=>l.map(x=>'<option value="'+x[0]+'" '+(x[0]==sel?'selected':'')+'>'+x[1]+'</option>').join('');
+ const T={dep:['Depósito','<label>Monto</label><input id="a" type="number" inputmode="decimal" min="0" placeholder="0.00"><label>Nota</label><input id="n" placeholder="Ej. Salario">'],
+ ret:['Retiro','<label>Monto</label><input id="a" type="number" inputmode="decimal" min="0" placeholder="0.00"><label>Nota</label><input id="n" placeholder="Ej. Supermercado">'],
+ tra:['Transferencia','<label>Monto</label><input id="a" type="number" inputmode="decimal" min="0" placeholder="0.00"><label>Desde</label><select id="f">'+o(A.slice(0,3))+'</select><label>Hacia</label><select id="to">'+o(A,'em')+'</select>'],
+ aho:['Aportar a meta','<p class="mu">'+(S.goals[i]||{}).n+'</p><label>Monto (sale de Efectivo)</label><input id="a" type="number" inputmode="decimal" min="0" placeholder="0.00">'],
+ inv:['Invertir en S&P 500','<label>Monto (sale de Efectivo)</label><input id="a" type="number" inputmode="decimal" min="0" placeholder="0.00"><p class="mu sm">Simulación: no se compra ningún activo real.</p>'],
+ goal:['Crear ahorro','<label>Nombre</label><input id="n" placeholder="Ej. Viaje soñado"><label>Meta</label><input id="a" type="number" inputmode="decimal" min="0" placeholder="0.00"><label>Fecha objetivo</label><input id="d" placeholder="Ej. Dic 2026">'],
+ inc:['Ingresos mensuales','<label>Monto por mes</label><input id="a" type="number" inputmode="decimal" min="0" value="'+(S.inc||'')+'">'],
+ cur:['Moneda principal',Object.keys(R).map(c=>'<button class="opt '+(S.cur==c?'on':'')+'" onclick="chcur(\''+c+'\')"><span class="rd"></span><b>'+c+'</b> — '+R[c][2]+'</button>').join('')+'<p class="mu sm">Tasas indicativas de la simulación, no ejecutables. Los saldos se convierten con ellas.</p>']}[t];
+ const e=document.createElement('div');e.className='sh';e.onclick=ev=>{if(ev.target==e)e.remove()};
+ e.innerHTML='<div><div class="row"><h1 style="font-size:20px">'+T[0]+'</h1><button class="back" onclick="this.closest(\'.sh\').remove()">Cerrar</button></div>'+T[1]+(t=='cur'?'':'<button class="btn" id="ok">Confirmar</button>')+'</div>';
+ document.body.appendChild(e);if(t!='cur')$('#ok').onclick=()=>{if(op(t,i))e.remove()}}
+function chcur(c){const k=R[c][0]/R[S.cur][0];['ef','em','inv','de','debt','ess','inc'].forEach(x=>S[x]=+(S[x]*k).toFixed(2));S.goals.forEach(g=>{g.t=+(g.t*k).toFixed(2);g.saved=+((g.saved||0)*k).toFixed(2)});S.tx.forEach(t=>t.a=+(t.a*k).toFixed(2));S.hist.forEach(h=>h[1]=+(h[1]*k).toFixed(2));S.cur=c;save();document.querySelector('.sh').remove();render();toast('Moneda cambiada a '+c)}
+function op(t,i){const a=val('a'),n=($('#n')||{}).value||'';
+ if(t=='inc'){S.inc=Math.max(0,a);save();render();return 1}
+ if(t=='goal'){if(!n||a<=0){toast('Pon un nombre y una meta mayor que 0');return 0}S.goals.push({n,t:a,saved:0,date:($('#d')||{}).value||''});save();render();toast('Ahorro creado');return 1}
+ if(a<=0){toast('Escribe un monto mayor que 0');return 0}
+ if(t=='dep'){S.ef+=a;add('Depósito',a,1,n||'Efectivo')}
+ else if(t=='ret'){if(a>S.ef){toast('Saldo insuficiente en Efectivo');return 0}S.ef-=a;add('Retiro',a,-1,n||'Efectivo')}
+ else if(t=='aho'){if(a>S.ef){toast('Saldo insuficiente en Efectivo');return 0}S.ef-=a;if(i==0)S.em+=a;else S.goals[i].saved+=a;add('Ahorro',a,-1,S.goals[i].n)}
+ else if(t=='inv'){if(a>S.ef){toast('Saldo insuficiente en Efectivo');return 0}S.ef-=a;S.inv+=a;add('Transferencia',a,-1,'Efectivo → Inversiones')}
+ else if(t=='tra'){const f=$('#f').value,to=$('#to').value;if(f==to){toast('Elige cuentas distintas');return 0}if(a>S[f]){toast('Saldo insuficiente en la cuenta de origen');return 0}S[f]-=a;if(to=='de')S.de=Math.max(0,S.de-a);else S[to]+=a;const N={ef:'Efectivo',em:'Emergencia',inv:'Inversiones',de:'Deudas'};add('Transferencia',a,-1,N[f]+' → '+N[to])}
+ snap();save();render();toast('Operación registrada (simulada)');return 1}
+
+/* ---------- RENDER ---------- */
+function render(){const A=$('#app'),N=$('#nav');save();
+ if(S.ob!=9){A.innerHTML=onboarding();N.style.display='none';return}
+ const P={home,acc,mov,aho,inv,plan,ana,ai,cfg,more};A.innerHTML=P[V]();N.style.display='flex';
+ const act=['home','acc','mov'].includes(V)?V:'more';
+ N.innerHTML=NAV.map(n=>'<button class="'+(n[0]==act?'on':'')+'" onclick="go(\''+n[0]+'\')"><b>'+n[1]+'</b>'+n[2]+'</button>').join('')}
+render();
+</script></body></html>
