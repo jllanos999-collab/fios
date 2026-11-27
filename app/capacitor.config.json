@@ -1,0 +1,7 @@
+{
+  "appId": "app.fios.demo",
+  "appName": "Fi.OS",
+  "webDir": "www",
+  "server": { "androidScheme": "https" },
+  "backgroundColor": "#050a1c"
+}
